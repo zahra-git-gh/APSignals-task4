@@ -3,34 +3,18 @@ import * as React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-
 import Typography from "@mui/material/Typography";
 import { ButtonReact } from "./Button";
 import { Box, Radio } from "@mui/material";
-import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { setPayment } from "@/redux/userSlice";
 
-export default function InstallmentCard({ setValue, value }) {
-  const router = useRouter();
-  const dispatch = useDispatch();
+export default function InstallmentCard({ setValue, value, setStep }) {
   function handleClick() {
-    dispatch(
-      setPayment({
-        cash: false,
-        installment: true,
-        month: 3,
-        totalAmount: 14500000,
-        amountPaid: 4833000,
-      })
-    );
-    router.replace("payment/installment");
+    setStep((prevActiveStep) => prevActiveStep + 1);
   }
   return (
     <Card
       sx={{
         minWidth: 300,
-        // width:400,
         borderRadius: "20px",
         height: 200,
         display: "flex",

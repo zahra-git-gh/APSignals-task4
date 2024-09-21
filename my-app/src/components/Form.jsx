@@ -5,33 +5,34 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ButtonReact } from "./Button";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
-import { setUser } from "@/redux/userSlice";
+import { postData } from "@/utils/actions";
 
-export default function Form() {
+export default function Form({ setStep }) {
   const [fullName, setFullName] = useState("");
   const [birthDate, setBirthDate] = useState();
   const [phoneNum, setPhoneNum] = useState("");
   const [email, setEmail] = useState("");
-  const dispatch = useDispatch();
-  const router = useRouter();
-  function handleSubmit(e) {
+  const [isLoading, setIsLoading] = useState(false);
+  async function handleSubmit(e) {
     e.preventDefault();
-    console.log({ fullName, birthDate: birthDate.$d, phoneNum, email });
-    dispatch(
-      setUser({
-        fullName,
-        birthDate: birthDate.$d,
-        phoneNumber: phoneNum,
-        email,
-      })
-    );
+    const data = {
+      fullName,
+      birthDate: birthDate.$d,
+      phonNumber: phoneNum,
+      email,
+    };
+    //post data
+    setIsLoading(true);
+    const newData = await postData("http://localhost:3000/api/user", data);
+    console.log(newData);
+    localStorage.setItem("id", newData._id);
+    setIsLoading(false);
+    //reset input
     setFullName("");
     setBirthDate(null);
     setPhoneNum("");
     setEmail("");
-    router.replace("/payment");
+    setStep((prevActiveStep) => prevActiveStep + 1);
   }
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -53,6 +54,7 @@ export default function Form() {
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             sx={{ marginTop: "15px", maxWidth: "380px", width: "100%" }}
+            disabled={isLoading}
           />
           <TextField
             required
@@ -63,6 +65,7 @@ export default function Form() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             sx={{ marginTop: "15px", maxWidth: "380px" }}
+            disabled={isLoading}
           />
           <DateField
             required
@@ -76,6 +79,7 @@ export default function Form() {
               setBirthDate(newValue);
             }}
             sx={{ marginTop: "15px", maxWidth: "380px" }}
+            disabled={isLoading}
           />
           <TextField
             required
@@ -86,12 +90,14 @@ export default function Form() {
             value={phoneNum}
             onChange={(e) => setPhoneNum(e.target.value)}
             sx={{ marginTop: "15px", maxWidth: "380px" }}
+            disabled={isLoading}
           />
           <ButtonReact
             text={"Next"}
             type="submit"
             width={"100%"}
             maxWidth={"380px"}
+            disabled={isLoading}
           />
         </form>
       </Container>

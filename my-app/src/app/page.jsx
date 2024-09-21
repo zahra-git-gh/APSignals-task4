@@ -1,23 +1,24 @@
-import Form from "@/components/Form";
-import styles from "./page.module.css";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import StepperReact from "@/components/StepperReact";
 
 export default function Home() {
   return (
     <main
       style={{
         display: "flex",
-        flexDirection: "column",
+
         justifyContent: "center",
         alignItems: "center",
         width: "100%",
         height: "100%",
       }}
     >
-      <Typography mb={10} variant="h4">
-        Login For Payment
-      </Typography>
-      <Form />
+      <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
+        <Typography mb={1} variant="h4">
+          Payment
+        </Typography>
+        <StepperReact />
+      </Box>
     </main>
   );
 }
