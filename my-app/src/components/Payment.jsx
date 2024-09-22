@@ -2,11 +2,12 @@
 
 import CashCard from "@/components/CashCard";
 import InstallmentCard from "@/components/InstallmentCard";
-import { Box, Container } from "@mui/material";
+import { Alert, Box, Container } from "@mui/material";
 import { useState } from "react";
 
 export default function Payment({ setStep }) {
   const [selectValue, setSelectValue] = useState("cash");
+  const [isError, setIsError] = useState(false);
   return (
     <Container
       maxWidth={"xl"}
@@ -20,6 +21,11 @@ export default function Payment({ setStep }) {
         gap: "30px",
       }}
     >
+      {isError && (
+        <Alert severity="error">
+          something went wrong please try again later
+        </Alert>
+      )}
       <Box
         display={"flex"}
         flexWrap={"wrap"}
@@ -27,7 +33,11 @@ export default function Payment({ setStep }) {
         alignItems={"center"}
         gap={"30px"}
       >
-        <CashCard value={selectValue} setValue={setSelectValue} />
+        <CashCard
+          value={selectValue}
+          setValue={setSelectValue}
+          setError={setIsError}
+        />
         <InstallmentCard
           setStep={setStep}
           value={selectValue}

@@ -10,7 +10,7 @@ import { Box, Radio } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { postData } from "@/utils/actions";
 
-export default function CashCard({ setValue, value }) {
+export default function CashCard({ setValue, value, setError }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -20,6 +20,11 @@ export default function CashCard({ setValue, value }) {
     const userId = localStorage.getItem("id");
     const data = { userId, totalAmount: 12000000, month: 1 };
     const newData = await postData("http://localhost:3000/api/payment", data);
+    if (!newData._id) {
+      setError(true);
+      setIsLoading(false);
+      return;
+    }
     console.log("new data of payment :", newData);
     setIsLoading(false);
     router.replace("/monthlyPlan");
@@ -60,6 +65,7 @@ export default function CashCard({ setValue, value }) {
           disabled={value !== "cash" || isLoading}
           text={"Get Started"}
           onclick={handleClick}
+          isLoading={isLoading}
         />
       </CardActions>
     </Card>

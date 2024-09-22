@@ -14,7 +14,6 @@ export default function InstallmentStepsCard({
   totalAmount,
   isShow = false,
 }) {
-  
   const wordsOfMonth = numberToWords(month);
   return (
     <Card

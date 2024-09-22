@@ -2,13 +2,14 @@
 import { ButtonReact } from "@/components/Button";
 import InstallmentStepsCard from "@/components/InstallmentStepsCard";
 import { postData } from "@/utils/actions";
-import { Box, Container, Button } from "@mui/material";
+import { Box, Container, Button, Alert } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function InstallmentOptionsParent({ setStep }) {
   const [selectValue, setSelectValue] = useState("Three");
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const router = useRouter();
   const data = {
     two: {
@@ -31,7 +32,11 @@ export default function InstallmentOptionsParent({ setStep }) {
       userId,
       ...data[selectValue.toLowerCase()],
     });
-    console.log(newData);
+    if (!newData._id) {
+      setIsError(true);
+      setIsLoading(false);
+      return;
+    }
     setIsLoading(false);
     router.replace("/monthlyPlan");
   }
@@ -49,6 +54,11 @@ export default function InstallmentOptionsParent({ setStep }) {
         height: "100%",
       }}
     >
+      {isError && (
+        <Alert severity="error">
+          something went wrong please try again later
+        </Alert>
+      )}
       <Box
         display={"flex"}
         gap={"50px"}
@@ -82,6 +92,7 @@ export default function InstallmentOptionsParent({ setStep }) {
         maxWidth={"400px"}
         text={"Get Started"}
         disabled={isLoading}
+        isLoading={isLoading}
       />
       <Button
         sx={{

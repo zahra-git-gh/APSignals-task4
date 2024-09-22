@@ -1,10 +1,12 @@
 "use client";
+import { ButtonReact } from "@/components/Button";
 import MonthTablePlan from "@/components/monthTablePlan";
 import { getData } from "@/utils/actions";
 import { Box, Container, Typography } from "@mui/material";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function Page() {
+export default function MonthlyPlanPage() {
   const userId = localStorage.getItem("id");
   const [user, setUser] = useState({ fullName: "", email: "" });
   const [payment, setPayment] = useState({
@@ -13,6 +15,7 @@ export default function Page() {
     amountPaid: 0,
     startMonth: "",
   });
+  const router = useRouter();
   useEffect(() => {
     async function fetchData() {
       const userData = await getData(
@@ -27,7 +30,22 @@ export default function Page() {
     fetchData();
   }, []);
   return (
-    <Container maxWidth={"md"}>
+    <Container
+      maxWidth={"md"}
+      sx={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
+        gap: "30px",
+      }}
+    >
+      <ButtonReact
+        onclick={() => router.replace("/")}
+        text={"Back Home Page"}
+      />
       <Box
         display={"flex"}
         width={"100%"}

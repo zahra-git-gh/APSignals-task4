@@ -1,5 +1,5 @@
 "use client";
-import { Container, TextField } from "@mui/material";
+import { Alert, Container, TextField } from "@mui/material";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -13,8 +13,10 @@ export default function Form({ setStep }) {
   const [phoneNum, setPhoneNum] = useState("");
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   async function handleSubmit(e) {
     e.preventDefault();
+    setIsError(false);
     const data = {
       fullName,
       birthDate: birthDate.$d,
@@ -24,7 +26,11 @@ export default function Form({ setStep }) {
     //post data
     setIsLoading(true);
     const newData = await postData("http://localhost:3000/api/user", data);
-    console.log(newData);
+    if (!newData._id) {
+      setIsError(true);
+      setIsLoading(false);
+      return;
+    }
     localStorage.setItem("id", newData._id);
     setIsLoading(false);
     //reset input
@@ -37,6 +43,11 @@ export default function Form({ setStep }) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Container maxWidth={"md"}>
+        {isError && (
+          <Alert severity="error">
+            something went wrong please try again later
+          </Alert>
+        )}
         <form
           onSubmit={handleSubmit}
           style={{
@@ -75,7 +86,6 @@ export default function Form({ setStep }) {
             views={["year", "month", "day"]}
             value={birthDate}
             onChange={(newValue) => {
-              console.log(newValue.$d);
               setBirthDate(newValue);
             }}
             sx={{ marginTop: "15px", maxWidth: "380px" }}
@@ -98,6 +108,7 @@ export default function Form({ setStep }) {
             width={"100%"}
             maxWidth={"380px"}
             disabled={isLoading}
+            isLoading={isLoading}
           />
         </form>
       </Container>

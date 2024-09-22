@@ -11,15 +11,3 @@ export async function GET(req, {params}){
         return Response.json(error)
     }
 }
-
-export async function PATCH(req, {params}){
-    try {
-        await connectMongoDB();
-        const data=await req.json();
-        const {id}=params;
-        const newPayment=await Payment.findByIdAndUpdate(id, data);
-        return Response.json(newPayment)
-    } catch (error) {
-        return Response.json(error)
-    }
-}

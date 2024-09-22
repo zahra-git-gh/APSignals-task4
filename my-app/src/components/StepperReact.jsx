@@ -16,11 +16,11 @@ export default function StepperReact() {
       description: <Form setStep={setActiveStep} />,
     },
     {
-      label: "Choose your payment",
+      label: "Selecet Your Payment Type",
       description: <Payment setStep={setActiveStep} />,
     },
     {
-      label: "How To Pay?",
+      label: "Choose Your Installment Payment Method",
       description: <InstallmentOptionsParent setStep={setActiveStep} />,
     },
   ];

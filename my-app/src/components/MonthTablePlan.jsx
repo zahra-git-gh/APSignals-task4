@@ -57,14 +57,8 @@ function generateInstallmentMonths(startMonthName, numberOfMonths) {
   });
 }
 
-export default function MonthTablePlan({
-  month,
-  totalAmount,
-  amountPaid,
-  startMonth,
-}) {
+export default function MonthTablePlan({ month, totalAmount, startMonth }) {
   const installmentMonths = generateInstallmentMonths(startMonth, month);
-  console.log(installmentMonths);
   const length = Number(month);
   const array = new Array(length).fill(null);
   const rows = array.map((item, i) => {
@@ -89,7 +83,9 @@ export default function MonthTablePlan({
         </TableHead>
         <TableBody>
           {rows.map((row, i) => {
-            const [isPaid, setIsPaid] = React.useState(false);
+            const [isPaid, setIsPaid] = React.useState(
+              row.status === "paid" || false
+            );
             return (
               <TableRow
                 key={i}
@@ -107,7 +103,7 @@ export default function MonthTablePlan({
                       row.status === "paid" || isPaid ? teal[200] : yellow[200],
                   }}
                 >
-                  {row.status}
+                  {isPaid ? "Paid" : "Pending"}
                 </TableCell>
                 <TableCell align="center">
                   <Button
